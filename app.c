@@ -107,17 +107,9 @@ void USER_INPUT_AND_UPDATES(){
 int end_game_counter = 0;
 int main()  
 {  
-    PRINT_TABLE();
-    for (int i = 0; i < 9; i++)
-    {
-        if(end_game_counter != 9){
-            USER_INPUT_AND_UPDATES();
-            end_game_counter++;
-        }else{
-            printf("\n\n\nEND\n\n\n");
-        }
-    }
-    
-    
-    
+    printf("Welcome to JavaTpoint");  
+    printf("\nThis is the Second sentence of the program");  
+    clrscr();  
+    printf("Output After using clrscr() function");  
+    return 0;  
 }  
