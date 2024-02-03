@@ -2,10 +2,20 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <string.h>
+#include <time.h>
+
 //  welcome
 #define CYAN printf("\033[0;36m");
+#define YELLOW printf("\e[1;93m");
+
+#define RED_R printf("\e[0;31m");
+#define RED_B printf("\e[1;31m");
+#define RED_UL printf("\e[4;31m");
+#define RED_BG printf("\e[41m");
+#define RED_HIBG printf("\e[0;101m");
+#define RED_HI printf("\e[0;91m");
+#define RED_BHI printf("\e[1;91m");
 #define RESET printf("\x1b[0m");
-#define RED printf("\x1b[31m"),
 
 int counter (char* message) {
     int count;
@@ -22,7 +32,7 @@ void welcomemessage (char* message) {
 }
 
 void GameRules() {
-    RED
+    RED_R
     printf("\x1b[31m""Rules of the game:\n""\x1b[31m");
     RESET;
     printf("\n");
@@ -133,17 +143,32 @@ int CHECK_WINNER(){
 
 void UPDATE(int USER){
     // invalid number
+    USER -= '0';
     if(USER > 9 || USER < 1){
-        printf("Enter a valid number\n");
+        system("cls");
+        PRINT_TABLE();
+        RED_HIBG
+        printf("Enter a valid number");
+        RESET
+        printf("\n");
         end_game_counter--;
+        if (flag) flag = 0;
+        else    flag = 1;
+        return;
     }
     
-    // if already taken
+    // ==> IF ALREADY TAKEN <==
     if( SQUARES_NUMBERS[(USER-1)/3][(USER-1)%3] == 'X' || 
         SQUARES_NUMBERS[(USER-1)/3][(USER-1)%3] == 'O'){
-        printf("\nAlready taken\n");
+        system("cls");
+        PRINT_TABLE();
+        YELLOW
+        printf("\n[%d] ",USER);
+        CYAN
+        printf("Already taken\n");
+        RED_R
         printf("Enter another number:\n");
-        
+        RESET
         // because it is considered as a round
         //but we don't want that
         end_game_counter--; 
@@ -161,10 +186,13 @@ void UPDATE(int USER){
         return;
     }
     
+    // ==> Updating <==
     if(flag)
         SQUARES_NUMBERS[(USER-1)/3][(USER-1)%3] = 'X';
     else
         SQUARES_NUMBERS[(USER-1)/3][(USER-1)%3] = 'O';
+    system("cls");
+    PRINT_TABLE();
 };
 /*------------------------------------------*/
 
@@ -173,14 +201,16 @@ void USER_INPUT_AND_UPDATES(){
     // update global array
     // input validation system    
         if(!flag){
-        scanf("%d", &X_USER, inputs_counter++);
+        X_USER = getch();
+        inputs_counter++;
         flag = 1;
         UPDATE(X_USER);
         if(inputs_counter > 4) // no one will win before 5 inputs
             CHECK_WINNER();
 
     }else if(flag){
-        scanf("%d", &O_USER, inputs_counter++);
+        O_USER = getch();
+        inputs_counter++;
         flag = 0;
         UPDATE(O_USER);
         if(inputs_counter > 4)
@@ -207,18 +237,14 @@ void USER_INPUT_AND_UPDATES(){
 
 
 int main(){
-   welcomemessage ("\033[1;34mwelcome to tic tac toe\033[0m");
+    welcomemessage ("\033[1;34mwelcome to tic tac toe\033[0m");
     GameRules();
-
-    int USER;
+    PRINT_TABLE();
     while(end_game_counter != 9){
-        PRINT_TABLE();
         USER_INPUT_AND_UPDATES();
         end_game_counter++;
         if(playerO ^ playerX){
-            // newgame/end function
             
-            PRINT_TABLE(); // final result 
             printf("\nNEW OR END");
             break;
         }
