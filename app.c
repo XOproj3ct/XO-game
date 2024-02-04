@@ -152,14 +152,9 @@ void WELCOME_RULES() {
     printf("If you are ready press any "RED_BG "key" RESET": ");
     startGame = getch();
 }
-
 /*-------------------------------------------*/
-
 char SQUARES_NUMBERS[3][3] = {{'1','2','3'},{'4','5','6'},{'7','8','9'}};
-
 /*-------------------------------------------*/
-
-
 void JUS_THE_TABLE(){
     printf("-------------\n");
     for (int i = 0; i < 3; i++)
@@ -384,6 +379,8 @@ void RESET_GAME(){
 }
 void START_GAME(){
     system("cls");
+    XO_ANIMATION(1);
+    system("cls");
     PRINT_TABLE();
     while(++end_game_counter != 10){
         USER_INPUT_AND_UPDATES();
@@ -457,8 +454,7 @@ int main(){
     WELCOME_RULES();
     
     if(startGame){
-        system("cls");
-        XO_ANIMATION(1);
+        
         START_GAME();
     }
     
