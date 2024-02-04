@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -368,6 +369,7 @@ void END_SCREEN(){
     printf("====");
     delay();
     printf("====\n");
+    printf("Press any key...");
     getch();
 }
 /*------------------------------------------*/
@@ -379,34 +381,8 @@ int main(){
         START_GAME();
     
     delay();
+
+    END_SCREEN();
     
-    printf("Thanks for playing ^.^\n");
-    printf("ab2a t3ala tany\n\n");
-    
-    delay();
-    
-    printf("produced by :\n");
-    
-    delay();
-    
-    printf("Ahmed Tharwat Abdelhamid\n");
-    
-    delay();
-    
-    printf("Moataz Mohamed Abdelrahman\n");
-    
-    delay();
-    
-    printf("Ahmed Mohamed Ali\n");
-    
-    delay();
-    
-    printf("Malak Salah Elddin Ahmed");
-    
-    return 0;
-    
+    exit(0);
 }
-
-
-    
-
