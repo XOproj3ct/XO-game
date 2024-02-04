@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -124,14 +123,16 @@ void XO_ANIMATION(int times){
     }
 }
 void WELCOME_RULES() {
+    // ====
     XO_ANIMATION(2);
-    
+    // ====
     printG(5);
     printf("\n");
     printO(5);
-    for (int i = 0; i < 900000000; i++);
-    
+    delay(3);
     system("cls");
+    // ====
+    // rules-welcome
     printf("--------------------------\n");
     printf("|"CYAN" welcome to tic tac toe "RESET"|\n");
     printf("--------------------------\n");
@@ -160,7 +161,6 @@ void JUS_THE_TABLE(){
     for (int i = 0; i < 3; i++)
     {
         printf("|");
-
         for (int j = 0; j <= 2; j++)
             if(SQUARES_NUMBERS[i][j] == 'X'){
                 
@@ -264,8 +264,8 @@ void UPDATE(int USER){
     // invalid number
     USER -= '0';
     if(USER > 9 || USER < 1){
-        if (flag) flag = 0;
-        else    flag = 1;
+        if (flag) flag--;
+        else    flag++;
         system("cls");
         PRINT_TABLE();
         
@@ -286,8 +286,8 @@ void UPDATE(int USER){
         // input [2] -> for "O" but we get X again in 2
         // that's because the change of the flag every input
         // this condition prevent that bug
-        if (flag) flag = 0;
-        else    flag = 1;
+        if (flag) flag--;
+        else    flag++;
         system("cls");
         PRINT_TABLE();
         
@@ -322,7 +322,7 @@ void USER_INPUT_AND_UPDATES(){
         if(!flag){
         X_USER = getch();
         inputs_counter++;
-        flag = 1;
+        flag++;
         UPDATE(X_USER);
         if(inputs_counter > 4) // no one will win before 5 inputs
             CHECK_WINNER();
@@ -330,7 +330,7 @@ void USER_INPUT_AND_UPDATES(){
     }else if(flag){
         O_USER = getch();
         inputs_counter++;
-        flag = 0;
+        flag--;
         UPDATE(O_USER);
         if(inputs_counter > 4)
             CHECK_WINNER();
@@ -402,49 +402,73 @@ void START_GAME(){
         return;
     }
 };
-void delay(){
-    for (int i = 0; i < 199990000; i++);
+void delay(int delay_time){
+    for (int i = 0; i < delay_time*199990000; i++);
 }
 void END_SCREEN(){
-    delay();
-
+    delay(1);
+    if(playerX){
+        for (int i = 0; i < 3; i++)
+        {
+            printX_SHAPE(5);
+            delay(3);
+            system("cls");
+            
+            printX_SHAPE(7);
+            delay(3);
+            system("cls");
+        }
+        printX_SHAPE(7);
+    }else if(playerO){
+        for (int i = 0; i < 3; i++)
+        {
+            printO_SHAPE(5);
+            delay(3);
+            system("cls");
+            
+            printO_SHAPE(7);
+            delay(3);
+            system("cls");
+        }
+        printO_SHAPE(7);
+    }
+    printf("\n");
+    
     printf("%c" RED_BHI "Thanks for playing ^.^" RESET "\n", 248);
     printf(YELLOW "ab2a t3ala tany\n\n" RESET);
+    // replaced by X-O animation
+    // JUS_THE_TABLE();
     
-    
-    
-    
-    JUS_THE_TABLE();
-    delay();
+    delay(1);
 
     printf("\e[4;37m""Produced by:\n" RESET);
-    delay();
+    delay(1);
     
     const char symbol_end = 192;
     printf(RED_HI "%cAhmed Mohamed\n" RESET, symbol_end);
-    delay();
+    delay(1);
     
     printf(BLUE_R "%cMalak Salah Elddin\n" RESET, symbol_end);
-    delay();
+    delay(1);
     
     printf(YELLOW "%cMoataz Mohamed\n" RESET, symbol_end);
-    delay();
+    delay(1);
 
     printf(GREEN "%cAhmed Tharwat\n" RESET, symbol_end);
 
-    delay();
+    delay(1);
     printf("\n====");
-    delay();
+    delay(1);
     printf("====");
-    delay();
+    delay(1);
     printf("====");
-    delay();
-    printf(RED_BG "BYE!" RESET); /* print love symbol */
-    delay();
+    delay(1);
+    printf(RED_BG "BYE!" RESET);
+    delay(1);
     printf("====");
-    delay();
+    delay(1);
     printf("====");
-    delay();
+    delay(1);
     printf("====\n");
     printf("Press any key...");
     getch();
@@ -454,8 +478,8 @@ int main(){
     WELCOME_RULES();
     
     if(startGame){
-        
         START_GAME();
+        
     }
     
     END_SCREEN();
