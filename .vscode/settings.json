@@ -2,6 +2,8 @@
   "files.associations": {
     "stdio.h": "c",
     "string.h": "c",
-    "locale.h": "c"
+    "locale.h": "c",
+    "iostream": "cpp",
+    "string": "cpp"
   }
 }

@@ -25,9 +25,6 @@
 #define RESET "\x1b[0m"
 
 void delay();
-int counter (char* message);
-void welcomemessage (char* message);
-void GameRules();
 void JUS_THE_TABLE();
 void PRINT_TABLE();
 int CHECK_WINNER();
@@ -36,27 +33,110 @@ void USER_INPUT_AND_UPDATES();
 void START_GAME();
 void RESET_GAME();
 void END_SCREEN();
+
+// Varibals
+int startGame; // that starts the game
+int playerX = 0; // ++ if playerX wins
+int playerO = 0; // ++ if playerO wins
+int end_game_counter = 0; // repeat current game
+int X_USER; // X user_input
+int O_USER; // O user_input
+int flag = 0; // switch between X & O players
+int inputs_counter = 0; //
+
+
 // ===============================================
 // ===============================================
 // ===============================================
-int counter (char* message) {
-    int count;
-    for (count = 0; message[count] != '\0'; count++); 
-    return count;
+// ========= OPENING_SCREEN ========
+void printX_SHAPE(int size) {
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (i == j || i + j == size - 1) {
+                printf(RED_B"X ");
+            } else {
+                printf("  ");
+            }
+        }
+        printf("\n");
+    }
+};
+void printO_SHAPE(int size) {
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if ((i == 0 || i == size - 1) && (j > 0 && j < size - 1)) {
+                printf(BLUE_R" O");
+            } else if ((i > 0 && i < size - 1) && (j == 0 || j == size - 1)) {
+                printf(BLUE_R" O");
+            } else {
+                printf("  ");
+            }
+        }
+        printf("\n");
+    }
+    printf(RESET);
 }
-void welcomemessage (char* message) {
-    int n = counter(message) ;  
-    for (int i = 7; i < n; i++) printf("-");
-    printf("\n| %s |\n", message);
-    for (int i = 7; i < n; i++) printf("-");
-    printf("\n");
+void printG(int size) {
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if ((i == 0 || i == size - 1) && (j > 0 && j < size - 1)) {
+                printf(" *");
+            } else if (i > 0 && i < size - 1 && j == 0) {
+                printf(" *");
+            } else if (i == size / 2 && j > size / 4 && j < size - 1) {
+                printf(" *");
+            } else if (i >= size / 2 && j == size - 1) {
+                printf(" *");
+            } else {
+                printf("  ");
+            }
+        }
+        printf("\n");
+    }
+}
+void printO(int size) {
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if ((i == 0 || i == size - 1) && (j > 0 && j < size - 1)) {
+                printf(" *");
+            } else if ((i > 0 && i < size - 1) && (j == 0 || j == size - 1)) {
+                printf(" *");
+            } else {
+                printf("  ");
+            }
+        }
+        printf("\n");
+    }
 }
 
-int startGame;
-void GameRules() {
+void XO_ANIMATION(int times){
+    for(int i = 0; i < times; i++){
+        printX_SHAPE(5);
+        
+        for (int i = 0; i < 900000000; i++);
+        system("cls");
     
+        printO_SHAPE(5);
+    
+        for (int i = 0; i < 900000000; i++);
+        system("cls");
+        
+    }
+}
+void WELCOME_RULES() {
+    XO_ANIMATION(2);
+    
+    printG(5);
+    printf("\n");
+    printO(5);
+    for (int i = 0; i < 900000000; i++);
+    
+    system("cls");
+    printf("--------------------------\n");
+    printf("|"CYAN" welcome to tic tac toe "RESET"|\n");
+    printf("--------------------------\n");
     printf(RED_R "\x1b[31m""Rules of the game:\n""\x1b[31m" RESET);
-    
+    printf("\033[44m");
     printf("\n");
     printf("1- Get three of your marks (X or O) in a row either horizontally, vertically, or diagonally.\n");
     printf("\n");
@@ -65,11 +145,12 @@ void GameRules() {
     printf("3- The first player to align three marks in a row wins the game.\n");
     printf("\n");
     printf("4- If all squares are filled and no player has three marks in a row, the game is declared a draw.\n");
-    printf("\n");
+    printf("\n"RESET);
+    
     printf("----------------------------------------\n");
     printf("----------------------------------------\n");
-    printf("If you ready press any "RED_BG "key" RESET": ");
-    startGame = getch() - '0';
+    printf("If you are ready press any "RED_BG "key" RESET": ");
+    startGame = getch();
 }
 
 /*-------------------------------------------*/
@@ -77,14 +158,7 @@ void GameRules() {
 char SQUARES_NUMBERS[3][3] = {{'1','2','3'},{'4','5','6'},{'7','8','9'}};
 
 /*-------------------------------------------*/
-// Varibals
-int playerX = 0;
-int playerO = 0;
-int end_game_counter = 0;
-int X_USER;
-int O_USER;
-int flag = 0;
-int inputs_counter = 0;
+
 
 void JUS_THE_TABLE(){
     printf("-------------\n");
@@ -200,7 +274,7 @@ void UPDATE(int USER){
         system("cls");
         PRINT_TABLE();
         
-        printf(RED_HIBG"Enter a valid number"RESET);
+        printf(RED_HIBG"\nEnter a valid input"RESET);
         
         printf("\n");
         end_game_counter--;
@@ -226,7 +300,7 @@ void UPDATE(int USER){
         
         printf(RED_R"Already taken\n"RESET);
         
-        printf("Enter another number:\n");
+        printf("Enter another number:");
         
         // because it is considered as a round
         //but we don't want that
@@ -268,6 +342,7 @@ void USER_INPUT_AND_UPDATES(){
     } 
 }
 /*------------------------------------------*/
+// recevies the update from CHECK_WINNER
 int PRINT_GAME_RESULT(){
     if(playerX) {
             system("cls");
@@ -319,24 +394,29 @@ void START_GAME(){
     }
     
     printf("\nNew Game? [Y/y] \nor press any key to ");
-        printf(RED_HI"EXIT"RESET".");
-            char NEW_END = getch();
-            if(NEW_END == 'Y' || NEW_END == 'y'){
-                RESET_GAME();
-                return START_GAME();
-            }
-            else{
-                system("cls");
-                // malak 
-                return;
-            }
+    printf(RED_HI"EXIT"RESET".");
+    char NEW_END = getch();
+    if(NEW_END == 'Y' || NEW_END == 'y'){
+        RESET_GAME();
+        return START_GAME();
+    }
+    else{
+        system("cls");
+        return;
+    }
 };
 void delay(){
     for (int i = 0; i < 199990000; i++);
 }
 void END_SCREEN(){
+    delay();
+
     printf("%c" RED_BHI "Thanks for playing ^.^" RESET "\n", 248);
     printf(YELLOW "ab2a t3ala tany\n\n" RESET);
+    
+    
+    
+    
     JUS_THE_TABLE();
     delay();
 
@@ -356,7 +436,7 @@ void END_SCREEN(){
     printf(GREEN "%cAhmed Tharwat\n" RESET, symbol_end);
 
     delay();
-    printf("====");
+    printf("\n====");
     delay();
     printf("====");
     delay();
@@ -374,14 +454,14 @@ void END_SCREEN(){
 }
 /*------------------------------------------*/
 int main(){
-    welcomemessage ("\033[1;34mwelcome to tic tac toe\033[0m");
-    GameRules();
+    WELCOME_RULES();
     
-    if(startGame)
+    if(startGame){
+        system("cls");
+        XO_ANIMATION(1);
         START_GAME();
+    }
     
-    delay();
-
     END_SCREEN();
     
     exit(0);
