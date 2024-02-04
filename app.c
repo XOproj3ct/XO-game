@@ -341,7 +341,8 @@ int main(){
     delay();
     
     printf("Malak Salah Elddin Ahmed");
-    
+        getchar();
+
     return 0;
     
 }
