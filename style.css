@@ -109,3 +109,15 @@ hr {
   width: 50%;
   margin: auto;
 }
+@media (max-width: 321px) {
+  * {
+    font-size: 10px;
+  }
+  .function,
+  .condition,
+  .variable,
+  .value {
+    font-size: 8px;
+    padding-inline: 5px;
+  }
+}
