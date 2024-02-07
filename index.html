@@ -13,6 +13,7 @@
     <div class="container main" data-aos="fade-down">
     <h1><span style="color:#FF3333" class="X">X</span>O Documentations</h1>
     <p>the last on earth team</p>
+    <p class="q" style="text-align: center; font-size: 17px; width: 70%; opacity: 60%;">After a long time practicing, our work will become natural, skillful, swift, and steady.</p>
     <a href="#main"><i class="fa-solid fa-angles-right arrow"></i></a>
     </div>
     
@@ -63,30 +64,6 @@
           <p>• <code class="function">END_OR_NEW_GAME</code> is invoked after the while loop breaking.</p>
         </div>
         
-      </section>
-      
-      <hr>
-      <!-- USER_INPUT_AND_UPDATES -->
-      <section data-aos="fade-up">
-        <h2>
-          USER_INPUT_AND_UPDATES
-        </h2>
-        <div class="text">
-          <p>• This function switches turns using <code class="condition">if condition</code> and <code class="variable"><code class="variable">flag</code></code>.</p>
-        
-        <p>• <code class="variable">flag</code> is a variable initialized to <code class="value">0</code></p>
-        <p>• the <code class="condition">if/else</code> condition logic:</p>
-        <ul>
-          <li>- every user should input a number from <code class="value">1→9</code></li>
-          <li>- every input is stored in the corresponding variable to the player <code class="variable">X_USER</code>/<code class="variable">O_USER</code></li>
-          <p>- <code class="variable">X_USER</code>/<code class="variable">O_USER</code> is passed to <code class="function">UPDATE</code> function to check input validation and update the table</p>
-          <li>- <code class="variable">inputs_counter</code> is increased by <code class="valid">1</code> every play (used to invoke <code class="function">CHECK_WINNER</code>).</li>
-          <li>- <code class="variable">flag</code> is switched every play to <code class="value">0/1</code> → represents <code class="value">X/O</code> player’s turn</li>
-          <li>- Invokes <code class="function">CHECK_WINNER</code> if <code class="variable">inputs_counter > 4 </code> as no one will when before the fifth play</li>
-          <li>- <code class="function">CHECK_WINNER</code> updates <code class="variable">playerX/playerO</code> to <code class="value">1</code> if there is a winner</li>
-        </ul>
-        <p>The final result of this function is updating <code class="variable">playerX/playerO</code> variable if there is a <code class="value">winner</code>, to be used later in <code class="function">PRINT_GAME_RESULT</code> .</p>
-        </div>
       </section>
       
       <hr>

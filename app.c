@@ -21,8 +21,7 @@ void CHECK_WINNER();
 void delay(int delay_time);
 void JUST_THE_TABLE();
 void PRINT_TABLE();
-void UPDATE(int USER);
-void USER_INPUT_AND_UPDATES();
+void UPDATE();
 void START_GAME();
 void RESET_GAME();
 void END_SCREEN();
@@ -32,9 +31,9 @@ int playerO = 0; // ++ if playerO wins
 int end_game_counter = 1; // repeat current game
 int X_USER; // X user_input
 int O_USER; // O user_input
-int flag = 0; // switch between X & O players
+int flag = 1; // switch between X & O players
 int inputs_counter = 0; // check_winner invoker
-// ========= OPENING_SCREEN ========
+// =========== OPENING_SCREEN ===========
 void printX_SHAPE(int size) {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
@@ -94,7 +93,6 @@ void printO(int size) {
         printf("\n");
     }
 }
-
 void XO_ANIMATION(int times){
     for(int i = 0; i < times; i++){
         printX_SHAPE(5);
@@ -129,92 +127,33 @@ void WELCOME_RULES() {
 /*-------------------------------------------*/
 char SQUARES_NUMBERS[3][3] = {{'1','2','3'},{'4','5','6'},{'7','8','9'}};
 /*-------------------------------------------*/
-void JUST_THE_TABLE(){
-    printf("-------------\n");
-    for (int i = 0; i < 3; i++)
-    {
-        printf("|");
-        for (int j = 0; j <= 2; j++)
-            if(SQUARES_NUMBERS[i][j] == 'X'){
-                printf(RED_B" %c "RESET, SQUARES_NUMBERS[i][j]);
-                printf("|");
-            }
-            else if(SQUARES_NUMBERS[i][j] == 'O'){
-                printf(BLUE_R" %c "RESET, SQUARES_NUMBERS[i][j]);
-                printf("|");
-            }else{
-                printf(" %c ",SQUARES_NUMBERS[i][j]);
-                printf("|");
-            }
-        printf("\n");
-        printf("-------------\n");
+void START_GAME(){
+    system("cls");
+    XO_ANIMATION(1);
+    
+    system("cls");
+    PRINT_TABLE(); // for the first time only
+    
+    while(1){
+        UPDATE();
+        // print game results:
+        // returns 1 if x win, o win, draw happen
+        // returns 0 else
+        if(PRINT_GAME_RESULT()) break;
+        end_game_counter++;
     }
-}
-void PRINT_TABLE(){
-    if(!flag) printf(RED_B "X "RESET "turn...\n");
-    else printf(BLUE_R "O " RESET "turn...\n");
-    printf("-------------\n");
-    for (int i = 0; i < 3; i++)
-    {
-        printf("|");
-        for (int j = 0; j <= 2; j++)
-            if(SQUARES_NUMBERS[i][j] == 'X'){
-                printf(RED_B" %c "RESET, SQUARES_NUMBERS[i][j]);
-                printf("|");
-            }
-            else if(SQUARES_NUMBERS[i][j] == 'O'){
-                printf(BLUE_R" %c "RESET, SQUARES_NUMBERS[i][j]);
-                printf("|");
-            }else{
-                printf(" %c ",SQUARES_NUMBERS[i][j]);
-                printf("|");
-            }
-        printf("\n");
-        printf("-------------\n");
-    }
-}
-/*------------------------------------------*/
-void CHECK_WINNER(){
-    //Check Win for rows
-    if(1){
-        for(int i=0; i<3; i++)
-            if(SQUARES_NUMBERS[i][0] == SQUARES_NUMBERS[i][1] && SQUARES_NUMBERS[i][0] == SQUARES_NUMBERS[i][2])/*|| SQUARES_NUMBERS[0][i] == SQUARES_NUMBERS[1][i] && SQUARES_NUMBERS[0][i] == SQUARES_NUMBERS[2][i])*/
-                if(SQUARES_NUMBERS[i][0] == 'O')
-                    playerO++;
-                else{
-                    playerX++;
-                }
-    // Check win for coloumns
-    for(int i = 0; i < 3; i++)
-        if(SQUARES_NUMBERS[0][i] == SQUARES_NUMBERS[1][i] && SQUARES_NUMBERS[0][i] == SQUARES_NUMBERS[2][i])
-            if(SQUARES_NUMBERS[0][i]=='O')
-                playerO++;
-            else
-                playerX++;
-                
-    //checking the win for both diagonal
-    if(SQUARES_NUMBERS[0][0] == SQUARES_NUMBERS[1][1] && SQUARES_NUMBERS[0][0] == SQUARES_NUMBERS[2][2])
-        if(SQUARES_NUMBERS[0][0]=='O')
-            playerO++;
-        else
-            playerX++;
-
-    if(SQUARES_NUMBERS[0][2] == SQUARES_NUMBERS[1][1] && SQUARES_NUMBERS[0][2] == SQUARES_NUMBERS[2][0])
-        if(SQUARES_NUMBERS[0][2]=='O')
-            playerO++;
-        else
-            playerX++;
-    }
-}
-/*------------------------------------------*/
-void UPDATE(int USER){
+    
+    END_OR_NEW_GAME();
+};
+/*-------------------------------------------*/
+void UPDATE(){
+    int USER = getch();
+    
     int invalid = 0;
     int taken = 0;   
     USER -= '0';
     // ==> Invalid number <==
     if(USER > 9 || USER < 1){
-        if (flag) flag--;
-        else    flag++;
         invalid = 1;
         printf("\n");
         end_game_counter--;
@@ -229,17 +168,20 @@ void UPDATE(int USER){
         // input [2] -> for "O" but we get X again in 2
         // that's because the change of the flag every input
         // this condition prevent that bug
-        if (flag) flag--;
-        else    flag++;
+        
         taken = 1;
         end_game_counter--; 
     }
     // ==> Updating <==
     if(!invalid && !taken)
-        if(flag)
+        if(flag){
             SQUARES_NUMBERS[(USER-1)/3][(USER-1)%3] = 'X';
-        else
+            flag--;
+        }
+        else{
             SQUARES_NUMBERS[(USER-1)/3][(USER-1)%3] = 'O';
+            flag++;
+        }
     /*
     --> after every action from above
         the terminal is cleared
@@ -248,6 +190,7 @@ void UPDATE(int USER){
     */
     system("cls");
     PRINT_TABLE();
+    
     if (invalid){
         printf(RED_HIBG"\nEnter a valid input"RESET);
         return;
@@ -258,32 +201,51 @@ void UPDATE(int USER){
         printf("Enter another number:");
         return;
     }
+    
+    inputs_counter++;
+    if(inputs_counter > 4)
+        CHECK_WINNER();
 };
-/*------------------------------------------*/
-void USER_INPUT_AND_UPDATES(){
-    // take input from user
-    // update global array
-    // input validation system    
-    if(!flag)
-    {
-        X_USER = getch();
-        inputs_counter++;
-        flag++;
-        UPDATE(X_USER);
-        if(inputs_counter > 4) // no one will win before 5 inputs
-            CHECK_WINNER();
-    }
-    else if(flag)
-    {
-        O_USER = getch();
-        inputs_counter++;
-        flag--;
-        UPDATE(O_USER);
-        if(inputs_counter > 4)
-            CHECK_WINNER();
-    } 
+/*-------------------------------------------*/
+void CHECK_WINNER(){
+    //Check Win for rows
+    for(int i=0; i<3; i++)
+        if(SQUARES_NUMBERS[i][0] == SQUARES_NUMBERS[i][1] && SQUARES_NUMBERS[i][0] == SQUARES_NUMBERS[i][2])
+            if(SQUARES_NUMBERS[i][0] == 'O'){
+                playerO++;
+            }
+            else{
+                playerX++;
+            }
+                
+    // Check win for coloumns
+    for(int i = 0; i < 3; i++)
+        if(SQUARES_NUMBERS[0][i] == SQUARES_NUMBERS[1][i] && SQUARES_NUMBERS[0][i] == SQUARES_NUMBERS[2][i])
+            if(SQUARES_NUMBERS[0][i]=='O'){
+                playerO++;
+            }
+            else{
+                playerX++;
+            }
+                
+    //checking the win for both diagonal
+    if(SQUARES_NUMBERS[0][0] == SQUARES_NUMBERS[1][1] && SQUARES_NUMBERS[0][0] == SQUARES_NUMBERS[2][2])
+        if(SQUARES_NUMBERS[0][0]=='O'){
+            playerO++;
+        }
+        else{
+            playerX++;
+        }
+
+    if(SQUARES_NUMBERS[0][2] == SQUARES_NUMBERS[1][1] && SQUARES_NUMBERS[0][2] == SQUARES_NUMBERS[2][0])
+        if(SQUARES_NUMBERS[0][2]=='O'){
+            playerO++;
+        }
+        else{
+            playerX++;
+        }
 }
-/*------------------------------------------*/
+/*-------------------------------------------*/
 // its logic is based on playerX/O after CHECK_WINNER updates them
 // and end_game_counter variable
 int PRINT_GAME_RESULT(){
@@ -307,23 +269,52 @@ int PRINT_GAME_RESULT(){
     }
     return 0;
 }
-/*------------------------------------------*/
-void RESET_GAME(){
-    char x = '1';
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            SQUARES_NUMBERS[i][j] = x;
-            x++;
-        }
-    }    
-    playerX = 0;
-    playerO = 0;
-    end_game_counter = 1;
-    X_USER;
-    O_USER;
-    flag = 0;
-    inputs_counter = 0;
+/*-------------------------------------------*/
+void JUST_THE_TABLE(){
+    printf("-------------\n");
+    for (int i = 0; i < 3; i++)
+    {
+        printf("|");
+        for (int j = 0; j <= 2; j++)
+            if(SQUARES_NUMBERS[i][j] == 'X'){
+                printf(RED_B" %c "RESET, SQUARES_NUMBERS[i][j]);
+                printf("|");
+            }
+            else if(SQUARES_NUMBERS[i][j] == 'O'){
+                printf(BLUE_R" %c "RESET, SQUARES_NUMBERS[i][j]);
+                printf("|");
+            }else{
+                printf(" %c ",SQUARES_NUMBERS[i][j]);
+                printf("|");
+            }
+        printf("\n");
+        printf("-------------\n");
+    }
 }
+void PRINT_TABLE(){
+    if(flag) printf(RED_B "X "RESET "turn...\n");
+    else printf(BLUE_R "O " RESET "turn...\n");
+    printf("-------------\n");
+    for (int i = 0; i < 3; i++)
+    {
+        printf("|");
+        for (int j = 0; j <= 2; j++)
+            if(SQUARES_NUMBERS[i][j] == 'X'){
+                printf(RED_B" %c "RESET, SQUARES_NUMBERS[i][j]);
+                printf("|");
+            }
+            else if(SQUARES_NUMBERS[i][j] == 'O'){
+                printf(BLUE_R" %c "RESET, SQUARES_NUMBERS[i][j]);
+                printf("|");
+            }else{
+                printf(" %c ",SQUARES_NUMBERS[i][j]);
+                printf("|");
+            }
+        printf("\n");
+        printf("-------------\n");
+    }
+}
+/*------------------------------------------*/
 void END_OR_NEW_GAME(){
     printf("\nNew Game? [Y/y] \nor press any key to "RED_HI"EXIT"RESET".");
     char NEW_END = getch();
@@ -337,26 +328,21 @@ void END_OR_NEW_GAME(){
         return;
     }
 }
-void START_GAME(){
-    system("cls");
-    XO_ANIMATION(1);
-    
-    system("cls");
-    PRINT_TABLE(); // for the first time only
-    
-    while(1){
-        USER_INPUT_AND_UPDATES();
-        // print game results:
-        // returns 1 if x win, o win, draw happen
-        // returns 0 else
-        if(PRINT_GAME_RESULT()) break;
-        end_game_counter++;
-    }
-    
-    END_OR_NEW_GAME();
-};
-void delay(int delay_time){
-    for (int i = 0; i < delay_time*199990000; i++);
+void RESET_GAME(){
+    char x = '1';
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            SQUARES_NUMBERS[i][j] = x;
+            x++;
+        }
+    }    
+    playerX = 0;
+    playerO = 0;
+    end_game_counter = 1;
+    X_USER;
+    O_USER;
+    flag = 1;
+    inputs_counter = 0;
 }
 void END_SCREEN(){
     delay(1);
@@ -425,6 +411,10 @@ void END_SCREEN(){
     printf("====\n");
     printf("Press any key...");
     getch();
+}
+/*------------------------------------------*/
+void delay(int delay_time){
+    for (int i = 0; i < delay_time*199990000; i++);
 }
 /*------------------------------------------*/
 int main(){
