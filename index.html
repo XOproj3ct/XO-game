@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title> XO Document</title>
+  </head>
+  <body>
+    <div class="container main" data-aos="fade-down">
+    <h1><span style="color:#FF3333" class="X">X</span>O Documentations</h1>
+    <p>the last on earth team</p>
+    <a href="#main"><i class="fa-solid fa-angles-right arrow"></i></a>
+    </div>
+    
+    <div class="container docs" id="main">
+      <!-- main -->
+      <section data-aos="fade-up" >
+        <h2>Main</h2>
+        <div class="text">
+          <p>• Invokes <code class="function"> WELCOME_RULES</code> function.</p>
+          <p>
+            • User should enter any key then
+            <code class="function">START_GAME</code> will be invoked.
+          </p>
+          <p>• Invokes <code class="function">START_GAME</code> function.</p>
+          <p>
+            • invokes <code class="function">exit</code> after some point will be
+            discussed later on.
+          </p>
+        </div>
+      </section>
+      
+      <hr>
+      <!-- START_GAME -->
+      <section data-aos="fade-up">
+        <h2>START_GAME (core function)</h2>
+        <div class="text">
+          <p>
+            • uses <code class="function">XO_ANIMATION</code> function to run X-O
+            animation as a loading screen.
+          </p>
+          <p>• the game starts by using a while loop: 
+            <ul>
+              <li>
+                - set to 1 
+              </li>
+              <li>
+                - invokes <code class="function">USER_INPUT_AND_UPDATES</code> function
+              </li>
+              <li>
+                - <code class="function">PRINT_GAME_RESULT</code> returns 1 —> else it returns 0
+              </li>
+              
+              <li>
+                - increases <code class="variable">end_game_counter</code> for every loop by 1
+              </li>
+            </ul>
+          </p>
+          <p>• <code class="function">END_OR_NEW_GAME</code> is invoked after the while loop breaking.</p>
+        </div>
+        
+      </section>
+      
+      <hr>
+      <!-- USER_INPUT_AND_UPDATES -->
+      <section data-aos="fade-up">
+        <h2>
+          USER_INPUT_AND_UPDATES
+        </h2>
+        <div class="text">
+          <p>• This function switches turns using <code class="condition">if condition</code> and <code class="variable"><code class="variable">flag</code></code>.</p>
+        
+        <p>• <code class="variable">flag</code> is a variable initialized to <code class="value">0</code></p>
+        <p>• the <code class="condition">if/else</code> condition logic:</p>
+        <ul>
+          <li>- every user should input a number from <code class="value">1→9</code></li>
+          <li>- every input is stored in the corresponding variable to the player <code class="variable">X_USER</code>/<code class="variable">O_USER</code></li>
+          <p>- <code class="variable">X_USER</code>/<code class="variable">O_USER</code> is passed to <code class="function">UPDATE</code> function to check input validation and update the table</p>
+          <li>- <code class="variable">inputs_counter</code> is increased by <code class="valid">1</code> every play (used to invoke <code class="function">CHECK_WINNER</code>).</li>
+          <li>- <code class="variable">flag</code> is switched every play to <code class="value">0/1</code> → represents <code class="value">X/O</code> player’s turn</li>
+          <li>- Invokes <code class="function">CHECK_WINNER</code> if <code class="variable">inputs_counter > 4 </code> as no one will when before the fifth play</li>
+          <li>- <code class="function">CHECK_WINNER</code> updates <code class="variable">playerX/playerO</code> to <code class="value">1</code> if there is a winner</li>
+        </ul>
+        <p>The final result of this function is updating <code class="variable">playerX/playerO</code> variable if there is a <code class="value">winner</code>, to be used later in <code class="function">PRINT_GAME_RESULT</code> .</p>
+        </div>
+      </section>
+      
+      <hr>
+      <!-- PRINT_GAME_RESULT -->
+      <section data-aos="fade-up">
+        <h2>PRINT_GAME_RESULT</h2>
+        <div class="text">
+            <p>• It will be invoked after every  <code class="function">USER_INPUT_AND_UPDATES</code>  invocation as shown in  <code class="function">START_GAME</code>  docs.</p>
+            <p>• It executes its blocks of code according to  <code class="variable">playerX</code> / <code class="variable">playerO</code>  values.</p>
+            <p>• Using  <code class="condition">if/else</code>  it invokes  <code class="function">JUST_THE_TABLE</code>  and the game result message then:</p>
+            <ul>
+                <li>- Returns  <code class="value">1</code>  if:
+                    <ul>
+                        <li>>> There is an update in  <code class="variable">playerX</code> / <code class="variable">playerO</code> </li>
+                        <li>>>  <code class="variable">end_game_counter = 9</code>   and there is no winner; it’s considered a <code class="value">DRAW</code></li>
+                    </ul>
+                </li>
+                <li>- Else it returns  <code class="value">0</code>  and the while loop in  <code class="function">START_GAME</code>  continues.</li>
+            </ul>
+            <p>• Breaks  <code class="function">START_GAME</code>  game loop if returned  <code class="value">1</code>  —> else it returns  <code class="value">0</code> </p>
+        </div>
+      </section>
+      
+      <hr>
+      <!-- UPDATE -->
+      <section data-aos="fade-up">
+        <h2>UPDATE</h2>
+        <div class="text">
+          <p>• It is invoked in <code class="function">USER_INPUT_AND_UPDATES</code> as discussed before.</p>
+          <p>• It accepts <code class="variable">X_USER</code>/<code class="variable">O_USER</code> as a params then does the following logic:</p>
+          <ul>
+            <li>- Checks input <span style="color:#ff6868;">validation</span>.</li>
+            <li>- Checks if the input is <span style="color:#ff6868;">already taken</span>.</li>
+          </ul>
+          <p>• Using <code class="variable">invalid</code> and <code class="variable">taken</code> :</p>
+          <ul>
+            <li>- if <code class="variable">invalid</code> is set to 1 it alerts the user to Enter a valid number</li>
+            
+            <li>- if <code class="variable">taken</code> is set to <code class="value">1</code> it alerts the user that the number is Already taken</li>
+            <li>
+              - if both are <code class="value">0</code> , it updates the inputted position in the table to X or O based on the player's turn.
+            </li>
+          </ul>
+          
+          <p><span style="color: #cc0000; font-weight: bold;">NOTE</span> if <code class="variable">invalid</code>/<code class="variable">taken</code> is 1 so the <code class="variable">flag</code> and <code class="variable">end_game_counter</code> must be set to its previous value to avoid undefined behaviours and this logic is implemented in a nested <code class="condition">if condition</code>.</p>      
+          
+        </div>
+      </section>
+      
+      <hr>
+      <!-- CHECK_WINNER -->
+      <section data-aos="fade-up">
+        <h2>CHECK_WINNER</h2>
+        <div class="text">• Checks rows, columns, and diagonals, and then updates <code class="variable">playerX</code>/<code class="variable">playerO</code> to <code class="value">1</code> if there’s a <code class="value">winner</code></div>
+      </section>
+      
+      <hr>
+      
+      <!-- END_OR_NEW_GAME -->
+      <section data-aos="fade-up">
+        <h2>END_OR_NEW_GAME</h2>
+        <div class="text">
+          <p>• It is invoked when the while loop in <code class="function">START_GAME</code> is breaked</p>
+          <p>• It uses <code class="variable">NEW_END</code> to receive user input</p>
+          <ul>
+            <li>- asks the user to input <code class="value">Y/y</code> for a new game</li>
+            <li>- asks the user to press any key to exit</li>
+          </ul>
+          
+            <p>• If <code class="variable">NEW_END</code> = <code class="value"> Y/y</code>:</p>
+            <ul>
+              <li>- <code class="function">RESET_GAME</code> is invoked</li>
+              <li>- returns <code     class="function">START_GAME</code>
+              </li>
+            </ul>
+          <p>• else it invokes <code class="function">END_SCREEN</code></p>
+        </div>
+      </section>
+      
+      <hr>
+      
+      <!-- END_SCREEN -->
+      <section data-aos="fade-up">
+        <h2>END_SCREEN</h2>
+        <div class="text">
+          • Prints the outro of the game, Animation to the last winner, Production team members and bye message.
+        </div>
+      </section>
+      
+      <hr>
+      
+      <!-- RESET_GAME -->
+      <section data-aos="fade-up">
+        <h2>RESET_GAME</h2>
+        <div class="text">
+        <p>
+          • Invoked if the user wants a new game ( <code class="variable">NEW_END</code> = <code class="value">Y/y</code> ) 
+        </p>
+        <p>• it resets all the variables</p>
+          </div>
+      </section>
+      
+      <hr>
+      
+      <!-- Other functions (no need to be discussed) -->
+      <section data-aos="fade-up">
+        <h2>Other functions (no need to be discussed)</h2>
+        <div class="text">
+          <p>• printX_SHAPE</p>
+          <p>• printO_SHAPE</p>
+          <p>• printG</p>
+          <p>• printO</p>
+          <p>• XO_ANIMATION</p>
+          <p>• delay</p>
+        </div>
+      </section>
+    </div>
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+    <script>
+      const arrow = document.querySelector(".arrow")
+      
+      window.addEventListener("load",()=>{
+        arrow.style.opacity = "100%";
+        arrow.style.bottom = "10%"
+      })
+    </script>
+  </body>
+</html>
