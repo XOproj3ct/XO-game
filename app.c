@@ -9,7 +9,6 @@
 #define GREEN   "\x1b[32m"
 #define RED_R "\e[0;31m"
 #define RED_B "\e[1;31m"
-#define RED_UL "\e[4;31m"
 #define RED_BG "\e[41m"
 #define RED_HIBG "\e[0;101m"
 #define RED_HI "\e[0;91m"
@@ -18,7 +17,7 @@
 #define RESET "\x1b[0m"
 
 void CHECK_WINNER();
-void delay(int delay_time);
+void delay(int delay_time); // it deferes from device to another
 void JUST_THE_TABLE();
 void PRINT_TABLE();
 void UPDATE();
@@ -26,11 +25,10 @@ void START_GAME();
 void RESET_GAME();
 void END_SCREEN();
 void END_OR_NEW_GAME();
+int PRINT_GAME_RESULT();
 int playerX = 0; // ++ if playerX wins
 int playerO = 0; // ++ if playerO wins
 int end_game_counter = 1; // repeat current game
-int X_USER; // X user_input
-int O_USER; // O user_input
 int flag = 1; // switch between X & O players
 int inputs_counter = 0; // check_winner invoker
 // =========== OPENING_SCREEN ===========
@@ -104,7 +102,8 @@ void XO_ANIMATION(int times){
         
     }
 }
-void WELCOME_RULES() {
+/*-------------------------------------------*/
+void WELCOME_RULES(){
     // ====
     XO_ANIMATION(2);
     // ====
@@ -147,33 +146,20 @@ void START_GAME(){
 };
 /*-------------------------------------------*/
 void UPDATE(){
-    int USER = getch();
+    int USER = getch() - '0';
     
     int invalid = 0;
     int taken = 0;   
-    USER -= '0';
     // ==> Invalid number <==
     if(USER > 9 || USER < 1){
         invalid = 1;
-        printf("\n");
         end_game_counter--;
-    }
-    // ==> IF ALREADY TAKEN <==
-    if( SQUARES_NUMBERS[(USER-1)/3][(USER-1)%3] == 'X' || 
-        SQUARES_NUMBERS[(USER-1)/3][(USER-1)%3] == 'O'){
-        // when input the same number twice
-        // The third symbol will be the first symbol
-        // input [1] -> X
-        // input [1] -> for "O" but 1 is already taken
-        // input [2] -> for "O" but we get X again in 2
-        // that's because the change of the flag every input
-        // this condition prevent that bug
-        
+    }    // ==> Already taken <==
+    else if( SQUARES_NUMBERS[(USER-1)/3][(USER-1)%3] == 'X' || SQUARES_NUMBERS[(USER-1)/3][(USER-1)%3] == 'O'){
         taken = 1;
         end_game_counter--; 
-    }
-    // ==> Updating <==
-    if(!invalid && !taken)
+    }   // ==> Updating <==
+    else{
         if(flag){
             SQUARES_NUMBERS[(USER-1)/3][(USER-1)%3] = 'X';
             flag--;
@@ -182,6 +168,7 @@ void UPDATE(){
             SQUARES_NUMBERS[(USER-1)/3][(USER-1)%3] = 'O';
             flag++;
         }
+    }
     /*
     --> after every action from above
         the terminal is cleared
@@ -195,8 +182,8 @@ void UPDATE(){
         printf(RED_HIBG"\nEnter a valid input"RESET);
         return;
     }
-    if (taken){
-        printf(YELLOW"\n[%d] "CYAN,USER);
+    else if(taken){
+        printf(YELLOW"\n[%d] "CYAN, USER);
         printf(RED_R"Already taken\n"RESET);
         printf("Enter another number:");
         return;
@@ -209,7 +196,7 @@ void UPDATE(){
 /*-------------------------------------------*/
 void CHECK_WINNER(){
     //Check Win for rows
-    for(int i=0; i<3; i++)
+    for(int i = 0; i < 3; i++)
         if(SQUARES_NUMBERS[i][0] == SQUARES_NUMBERS[i][1] && SQUARES_NUMBERS[i][0] == SQUARES_NUMBERS[i][2])
             if(SQUARES_NUMBERS[i][0] == 'O'){
                 playerO++;
@@ -217,7 +204,6 @@ void CHECK_WINNER(){
             else{
                 playerX++;
             }
-                
     // Check win for coloumns
     for(int i = 0; i < 3; i++)
         if(SQUARES_NUMBERS[0][i] == SQUARES_NUMBERS[1][i] && SQUARES_NUMBERS[0][i] == SQUARES_NUMBERS[2][i])
@@ -294,30 +280,14 @@ void JUST_THE_TABLE(){
 void PRINT_TABLE(){
     if(flag) printf(RED_B "X "RESET "turn...\n");
     else printf(BLUE_R "O " RESET "turn...\n");
-    printf("-------------\n");
-    for (int i = 0; i < 3; i++)
-    {
-        printf("|");
-        for (int j = 0; j <= 2; j++)
-            if(SQUARES_NUMBERS[i][j] == 'X'){
-                printf(RED_B" %c "RESET, SQUARES_NUMBERS[i][j]);
-                printf("|");
-            }
-            else if(SQUARES_NUMBERS[i][j] == 'O'){
-                printf(BLUE_R" %c "RESET, SQUARES_NUMBERS[i][j]);
-                printf("|");
-            }else{
-                printf(" %c ",SQUARES_NUMBERS[i][j]);
-                printf("|");
-            }
-        printf("\n");
-        printf("-------------\n");
-    }
+    
+    JUST_THE_TABLE();
 }
 /*------------------------------------------*/
 void END_OR_NEW_GAME(){
     printf("\nNew Game? [Y/y] \nor press any key to "RED_HI"EXIT"RESET".");
     char NEW_END = getch();
+    
     if(NEW_END == 'Y' || NEW_END == 'y'){
         RESET_GAME();
         return START_GAME();
@@ -339,8 +309,6 @@ void RESET_GAME(){
     playerX = 0;
     playerO = 0;
     end_game_counter = 1;
-    X_USER;
-    O_USER;
     flag = 1;
     inputs_counter = 0;
 }
@@ -375,8 +343,6 @@ void END_SCREEN(){
     
     printf("%c" RED_BHI "Thanks for playing ^.^" RESET "\n", 248);
     printf(YELLOW "ab2a t3ala tany\n\n" RESET);
-    // replaced by X-O animation
-    // JUST_THE_TABLE();
     
     delay(1);
 

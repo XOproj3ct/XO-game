@@ -16,14 +16,21 @@ body {
 .docs {
   padding-top: 20px;
 }
-
+.q {
+  text-align: center;
+  font-size: 17px;
+  opacity: 60%;
+}
 @media (max-width: 768px) {
   .container {
     width: 100%;
-    padding: 15px;
+    padding: 30px;
   }
   * {
     font-size: 14px;
+  }
+  .q {
+    display: none;
   }
 }
 
@@ -126,5 +133,11 @@ hr {
   h1,
   .X {
     font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .namesBtn {
+    display: none;
   }
 }
