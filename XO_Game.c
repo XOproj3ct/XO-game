@@ -17,7 +17,7 @@
 #define RESET "\x1b[0m"
 
 void CHECK_WINNER();
-void delay(int delay_time); // it deferes from device to another
+void delay(int delay_time); // it differs from device to another
 void JUST_THE_TABLE();
 void PRINT_TABLE();
 void UPDATE();
